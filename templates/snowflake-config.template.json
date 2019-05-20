@@ -127,7 +127,7 @@
                     "mainSteps": [
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "1-DownloadSnowflakeConfigFiles",
+                            "name": "1_DownloadSnowflakeConfigFiles",
                             "inputs": {
                                 "runCommand": [
                                     "Import-Module BitsTransfer",
@@ -144,7 +144,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "2-SaveTemporarySnowflakeCredentials",
+                            "name": "2_SaveTemporarySnowflakeCredentials",
                             "inputs": {
                                 "runCommand": [
                                     "Add-Content c:\\tabsetup\\config-temp \"[connections.quickstart]\" -Encoding UTF8",
@@ -156,7 +156,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "3-InstallSnowsql",
+                            "name": "3_InstallSnowsql",
                             "inputs": {
                                 "runCommand": [
                                     "cmd.exe /c msiexec /i snowsql.msi /q",
@@ -170,7 +170,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "4-InstallPythonDependencies",
+                            "name": "4_InstallPythonDependencies",
                             "inputs": {
                                 "runCommand": [
                                     "cmd.exe /c \"C:\\Program Files\\Python36\\python.exe\" -m pip install tableaudocumentapi"
@@ -180,7 +180,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "5-UpdateSampleDatasource",
+                            "name": "5_UpdateSampleDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -204,7 +204,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "6-UpdateStorageUsageDatasource",
+                            "name": "6_UpdateStorageUsageDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -243,7 +243,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "7-CreateSnowflakeSampleProject",
+                            "name": "7_CreateSnowflakeSampleProject",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -267,7 +267,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "8-CreateSnowflakeAdminProject",
+                            "name": "8_CreateSnowflakeAdminProject",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -291,7 +291,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "9-PublishSnowflakeDatasource",
+                            "name": "9_PublishSnowflakeDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -322,7 +322,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "10-PublishWarehousingMeteringDatasource",
+                            "name": "10_PublishWarehousingMeteringDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -353,7 +353,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "11-PublishStorageDatasource",
+                            "name": "11_PublishStorageDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -384,7 +384,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "12-PublishQueryDatasource",
+                            "name": "12_PublishQueryDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -415,7 +415,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "13-PublishSampleDashboard",
+                            "name": "13_PublishSampleDashboard",
                             "inputs": {
                                 "runCommand": [
                                     {
