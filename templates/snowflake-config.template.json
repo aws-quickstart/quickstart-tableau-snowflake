@@ -139,7 +139,10 @@
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/snowflake-odbc-driver.msi\" -Destination \"C:\\tabsetup\\snowflake-odbc-driver.msi\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/snowsetup.txt\" -Destination \"C:\\tabsetup\\snowsetup.txt\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/quickstart.twb\" -Destination \"C:\\tabsetup\\quickstart.twb\""
-                                ]
+                                ],
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -151,7 +154,10 @@
                                     "Add-Content c:\\tabsetup\\config-temp \"accountname = {{SnowflakeAccountName}}\" -Encoding UTF8",
                                     "Add-Content c:\\tabsetup\\config-temp \"username = {{SnowflakeUsername}}\" -Encoding UTF8",
                                     "Add-Content c:\\tabsetup\\config-temp \"password = {{SnowflakePassword}}\" -Encoding UTF8"
-                                ]
+                                ],
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -165,7 +171,10 @@
                                     "cmd.exe /c del c:\\tabsetup\\config-temp"
 
                                 ],
-                                "workingDirectory": "c:\\tabsetup"
+                                "workingDirectory": "c:\\tabsetup",
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -175,7 +184,10 @@
                                 "runCommand": [
                                     "cmd.exe /c \"C:\\Program Files\\Python36\\python.exe\" -m pip install tableaudocumentapi"
                                 ],
-                                "workingDirectory": "c:\\tabsetup"
+                                "workingDirectory": "c:\\tabsetup",
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -199,7 +211,10 @@
                                         ]
                                     }
                                 ],
-                                "workingDirectory": "c:\\tabsetup"
+                                "workingDirectory": "c:\\tabsetup",
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -238,7 +253,10 @@
                                         ]
                                     }
                                 ],
-                                "workingDirectory": "c:\\tabsetup"
+                                "workingDirectory": "c:\\tabsetup",
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -262,7 +280,10 @@
                                         ]
                                     }
                                 ],
-                                "workingDirectory": "c:\\tabsetup"
+                                "workingDirectory": "c:\\tabsetup",
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -286,7 +307,10 @@
                                         ]
                                     }
                                 ],
-                                "workingDirectory": "c:\\tabsetup"
+                                "workingDirectory": "c:\\tabsetup",
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -317,7 +341,10 @@
                                         ]
                                     }
                                 ],
-                                "workingDirectory": "c:\\tabsetup"
+                                "workingDirectory": "c:\\tabsetup",
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -348,7 +375,10 @@
                                         ]
                                     }
                                 ],
-                                "workingDirectory": "c:\\tabsetup"
+                                "workingDirectory": "c:\\tabsetup",
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -379,7 +409,10 @@
                                         ]
                                     }
                                 ],
-                                "workingDirectory": "c:\\tabsetup"
+                                "workingDirectory": "c:\\tabsetup",
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -410,7 +443,10 @@
                                         ]
                                     }
                                 ],
-                                "workingDirectory": "c:\\tabsetup"
+                                "workingDirectory": "c:\\tabsetup",
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         },
                         {
@@ -435,7 +471,10 @@
                                         ]
                                     }
                                 ],
-                                "workingDirectory": "c:\\tabsetup"
+                                "workingDirectory": "c:\\tabsetup",
+                                "CloudWatchOutputConfig": {
+                                    "CloudWatchOutputEnabled": "true"
+                                }
                             }
                         }
                     ]
