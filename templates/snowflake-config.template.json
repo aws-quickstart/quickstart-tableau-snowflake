@@ -161,8 +161,7 @@
                             "inputs": {
                                 "runCommand": [
                                     "msiexec /i snowsql.msi /q",
-                                    "msiexec /i snowflake-odbc-driver.msi /q",
-                                    "& \"c:\\Program Files\\Snowflake SnowSQL\\snowsql.exe\" --config \"c:\\tabsetup\\config-temp\" -c quickstart -f \"c:\\tabsetup\\snowsetup.txt\""
+                                    "msiexec /i snowflake-odbc-driver.msi /q"
                                 ],
                                 "workingDirectory": "c:\\tabsetup"
                             }
