@@ -207,7 +207,7 @@
                                             [
                                                 "& \"C:\\Program Files\\Python36\\python.exe\"",
                                                 "update-datasource.py",
-                                                "--filename c:\\tabsetup\\snowflake.tds",
+                                                "--filename c:\\tabsetup\\yellow_trip_data.tds",
                                                 "--server {{SnowflakeHost}}",
                                                 "--dbname {{SnowflakeDatabaseName}}",
                                                 "--username {{SnowflakeUsername}}",
@@ -323,7 +323,7 @@
                                             "",
                                             [
                                                 "powershell.exe -ExecutionPolicy RemoteSigned -Command \"",
-                                                "& D:\\tableau\\*\\bin*\\tabcmd.exe publish c:\\tabsetup\\snowflake.tds ",
+                                                "& D:\\tableau\\*\\bin*\\tabcmd.exe publish c:\\tabsetup\\yellow_trip_data.tds ",
                                                 "--server http://localhost ",
                                                 "--project Snowflake_Samples ",
                                                 "--username {{TableauServerAdminUser}}",
@@ -455,6 +455,31 @@
                                                 "--password {{TableauServerAdminPassword}}",
                                                 "\"",
                                                 " > c:\\tabsetup\\publish-workbook-output.txt 2>&1"
+                                            ]
+                                        ]
+                                    }
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "16_AccountUsageDashboard",
+                            "inputs": {
+                                "runCommand": [
+                                    {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "powershell.exe -ExecutionPolicy RemoteSigned -Command \"",
+                                                "& D:\\tableau\\*\\bin*\\tabcmd.exe publish c:\\tabsetup\\Account_Usage.twb ",
+                                                "--server http://localhost ",
+                                                "--project Snowflake_Admin ",
+                                                "--username {{TableauServerAdminUser}}",
+                                                " ",
+                                                "--password {{TableauServerAdminPassword}}",
+                                                "\"",
+                                                " > c:\\tabsetup\\publish-account-usage-workbook-output.txt 2>&1"
                                             ]
                                         ]
                                     }
