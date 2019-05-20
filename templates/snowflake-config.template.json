@@ -162,8 +162,7 @@
                                 "runCommand": [
                                     "msiexec /i snowsql.msi /q",
                                     "msiexec /i snowflake-odbc-driver.msi /q",
-                                    "$command = $(\"`\"c:\\Program Files\\Snowflake SnowSQL\\snowsql.exe`\" --config `\"c:\\tabsetup\\config-temp`\" -c quickstart -f `\"c:\\tabsetup\\snowsetup.txt`\"\")",
-                                    "cmd.exe /c \"`\"$command`\"\""
+                                    "& \"c:\\Program Files\\Snowflake SnowSQL\\snowsql.exe\" --config \"c:\\tabsetup\\config-temp\" -c quickstart -f \"c:\\tabsetup\\snowsetup.txt\""
                                 ],
                                 "workingDirectory": "c:\\tabsetup"
                             }
@@ -173,7 +172,7 @@
                             "name": "4_CleanupSnowflakeConfig",
                             "inputs": {
                                 "runCommand": [
-                                    "cmd.exe /c del c:\\tabsetup\\config-temp"
+                                    "del c:\\tabsetup\\config-temp"
                                 ],
                                 "workingDirectory": "c:\\tabsetup"
                             }
@@ -183,7 +182,7 @@
                             "name": "5_InstallPythonDependencies",
                             "inputs": {
                                 "runCommand": [
-                                    "cmd.exe /c \"C:\\Program Files\\Python36\\python.exe\" -m pip install tableaudocumentapi"
+                                    "& \"C:\\Program Files\\Python36\\python.exe\" -m pip install tableaudocumentapi"
                                 ],
                                 "workingDirectory": "c:\\tabsetup"
                             }
@@ -197,8 +196,7 @@
                                         "Fn::Join": [
                                             " ",
                                             [
-                                                "cmd.exe /c",
-                                                "\"C:\\Program Files\\Python36\\python.exe\"",
+                                                "& \"C:\\Program Files\\Python36\\python.exe\"",
                                                 "update-datasource.py",
                                                 "--filename c:\\tabsetup\\snowflake.tds",
                                                 "--server {{SnowflakeHost}}",
@@ -221,8 +219,7 @@
                                         "Fn::Join": [
                                             " ",
                                             [
-                                                "cmd.exe /c",
-                                                "\"C:\\Program Files\\Python36\\python.exe\"",
+                                                "& \"C:\\Program Files\\Python36\\python.exe\"",
                                                 "update-datasource.py",
                                                 "--filename c:\\tabsetup\\STORAGE_USAGE.tds",
                                                 "--server {{SnowflakeHost}}",
@@ -245,8 +242,7 @@
                                         "Fn::Join": [
                                             " ",
                                             [
-                                                "cmd.exe /c",
-                                                "\"C:\\Program Files\\Python36\\python.exe\"",
+                                                "& \"C:\\Program Files\\Python36\\python.exe\"",
                                                 "update-datasource.py",
                                                 "--filename c:\\tabsetup\\WAREHOUSE_METERING_HISTORY.tds",
                                                 "--server {{SnowflakeHost}}",
@@ -541,7 +537,7 @@
                                 "                DocumentName=ssmDocument,",
                                 "                TimeoutSeconds=3600,",
                                 "                Comment='Snowflake config for Tableau server',",
-                                "                CloudWatchOutputConfig={'CloudWatchOutputEnabled': True}",
+                                "                CloudWatchOutputConfig={'CloudWatchOutputEnabled': True},",
                                 "                MaxConcurrency='50',",
                                 "                MaxErrors='5',",
                                 "            )",
