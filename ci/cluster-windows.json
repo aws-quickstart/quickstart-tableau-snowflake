@@ -101,7 +101,7 @@
     },
     {
         "ParameterKey": "TableauServerLicenseKey",
-        "ParameterValue": ""
+        "ParameterValue": "TSRG-20C6-1490-DCDB-76C5"
     },
     {
         "ParameterKey": "Username",
@@ -126,5 +126,9 @@
     {
         "ParameterKey": "SnowflakeDatabaseName",
         "ParameterValue": "NYC_TAXI_DATA"
+    },
+    {
+        "ParameterKey": "DeploymentMode",
+        "ParameterValue": "Cluster"
     }
 ]

@@ -19,8 +19,13 @@ global:
   reporting: true
  
 tests:
-  tableau-snowflaket1:
-    parameter_input: single-windows.json
+#  tableau-snowflaket1:
+#    parameter_input: single-windows.json
+#    template_file: tableau-snowflake-master.template.json
+#    regions:
+#      - us-east-1
+  tableau-cluster-snowflake:
+    parameter_input: cluster-windows.json
     template_file: tableau-snowflake-master.template.json
     regions:
-      - us-east-1
+      - us-west-2

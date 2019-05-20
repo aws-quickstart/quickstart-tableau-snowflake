@@ -10,10 +10,8 @@
                     },
                     "Parameters": [
                         "KeyPairName",
-                        "AvailabilityZones",
-                        "PublicSubnet1CIDR",
-                        "PublicSubnet2CIDR",
-                        "VPCCIDR",
+                        "VPCID",
+                        "PublicSubnetID",
                         "SourceCIDR",
                         "InstanceType",
                         "AMIOS"
@@ -55,7 +53,9 @@
                     "Label": {
                         "default": "AWS Quick Start Configuration"
                     },
-                    "Parameters": ["QSS3BucketName"]
+                    "Parameters": [
+                        "QSS3BucketName"
+                    ]
                 },
                 {
                     "Label": {
@@ -70,9 +70,6 @@
                 }
             ],
             "ParameterLabels": {
-                "AvailabilityZones": {
-                    "default": "Availability Zones"
-                },
                 "AcceptEULA": {
                     "default": "Accept Tableau End User License Agreement"
                 },
@@ -88,11 +85,8 @@
                 "Password": {
                     "default": "Tableau Services Manager (TSM) administrator password"
                 },
-                "PublicSubnet1CIDR": {
-                    "default": "Public Subnet 1 CIDR"
-                },
-                "PublicSubnet2CIDR": {
-                    "default": "Public Subnet 2 CIDR"
+                "PublicSubnetID": {
+                    "default": "Public Subnet ID"
                 },
                 "QSS3BucketName": {
                     "default": "Quick Start S3 Bucket Name"
@@ -148,8 +142,8 @@
                 "Username": {
                     "default": "Tableau Services Manager (TSM) administrator username"
                 },
-                "VPCCIDR": {
-                    "default": "VPC CIDR"
+                "VPCID": {
+                    "default": "VPC where you will deploy the server"
                 },
                 "SnowflakeHost" : {
                     "default": "URL of your Snowflake instance"
@@ -157,31 +151,32 @@
                 "SnowflakeUsername" : {
                     "default": "Username for your Snowflake account"
                 },
-                "SnowflakePassword": {
+                "SnowflakePassword" : {
                     "default": "Password for your Snowflake account"
                 },
                 "SnowflakeDatabaseName" : {
-                    "default": "Name of the Snowflake database you are connecting to"
+                    "default": "Name of the Snowflake database you're connecting to"
                 }
             }
         }
     },
     "Parameters": {
-        "AvailabilityZones": {
-            "Description": "List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and 2 AZs will be used for this deployment",
-            "Type": "List<AWS::EC2::AvailabilityZone::Name>"
-        },
         "AMIOS": {
             "AllowedValues": [
-                "Windows"
+                "Windows",
+                "CentOS-7-HVM",
+                "Ubuntu-Server-16.04-LTS-HVM"
             ],
-            "Default": "Windows",
+            "Default": "CentOS-7-HVM",
             "Description": "Operating System on which Tableau Server will be deployed",
             "Type": "String"
         },
         "AcceptEULA": {
             "AllowedPattern": "Yes",
-            "AllowedValues": ["Yes", "No"],
+            "AllowedValues": [
+                "Yes",
+                "No"
+            ],
             "Description": "View the EULA at the Link: https://www.tableau.com/eula",
             "Type": "String"
         },
@@ -212,17 +207,9 @@
             "NoEcho": "true",
             "Type": "String"
         },
-        "PublicSubnet1CIDR": {
-            "AllowedPattern": "[a-zA-Z0-9]+\\..+",
-            "Default": "10.0.128.0/20",
-            "Description": "CIDR Block for the Public DMZ Subnet located in AZ1",
-            "Type": "String"
-        },
-        "PublicSubnet2CIDR": {
-            "AllowedPattern": "[a-zA-Z0-9]+\\..+",
-            "Default": "10.0.144.0/20",
-            "Description": "CIDR Block for the Public DMZ Subnet located in AZ2",
-            "Type": "String"
+        "PublicSubnetID": {
+            "Description": "The ID of the public subnet in the Primary server's Availability Zone",
+            "Type": "AWS::EC2::Subnet::Id"
         },
         "QSS3BucketName": {
             "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
@@ -234,7 +221,7 @@
         "QSS3KeyPrefix": {
             "AllowedPattern": "^[0-9a-zA-Z-/]*$",
             "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
-            "Default": "quickstart-tableau-snowflake/",
+            "Default": "tableau-snowflake-quickstart/",
             "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
             "Type": "String"
         },
@@ -316,20 +303,9 @@
             "MaxLength": "30",
             "Type": "String"
         },
-        "VPCCIDR": {
-            "AllowedPattern": "[a-zA-Z0-9]+\\..+",
-            "Default": "10.0.0.0/16",
-            "Description": "CIDR Block for the VPC",
-            "Type": "String"
-        },
-        "DeploymentMode": {
-            "AllowedValues": [
-                "Standalone",
-                "Cluster"
-            ],
-            "Default": "Standalone",
-            "Description": "Deployment mode for Tableau server installation.",
-            "Type": "String"
+        "VPCID": {
+            "Description": "List of  available VPCs to choose from.",
+            "Type": "AWS::EC2::VPC::Id"
         },
         "SnowflakeHost": {
             "Description": "URL host name of your Snowflake instance.  Do not include leading 'https:\\'",
@@ -348,6 +324,44 @@
         "SnowflakeDatabaseName": {
             "Description": "Name of the Snowflake database you are connecting to",
             "Type": "String"
+        },
+        "PrimarySubnetID": {
+            "Description": "The ID of the subnet for the Primary server",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "Worker1PublicSubnetID": {
+            "Description": "The ID of the public subnet in the Worker1 server's Availability Zone",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "Worker1SubnetID": {
+            "Description": "The ID of the subnet for the Worker1 server",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "Worker2PublicSubnetID": {
+            "Description": "The ID of the public subnet in the Worker2 server's Availability Zone",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "Worker2SubnetID": {
+            "Description": "The ID of the subnet for the Worker2 server",
+            "Type": "AWS::EC2::Subnet::Id"
+        }
+    },
+    "Conditions": {
+        "InfaOnWindows": {
+            "Fn::Equals": [
+                {
+                    "Ref": "AMIOS"
+                },
+                "Windows"
+            ]
+        },
+        "InfaOnCentos": {
+            "Fn::Equals": [
+                {
+                    "Ref": "AMIOS"
+                },
+                "CentOS-7-HVM"
+            ]
         }
     },
     "Mappings": {
@@ -369,484 +383,264 @@
             }
         }
     },
-    "Conditions": {
-        "InfaOnWindows": {
-            "Fn::Equals": [
-                {
-                    "Ref": "AMIOS"
-                },
-                "Windows"
-            ]
-        },
-        "StandaloneInstallation": {
-            "Fn::Equals": [
-                {
-                    "Ref": "DeploymentMode"
-                },
-                "Standalone"
-            ]
-        },
-        "ClusterInstallation": {
-            "Fn::Equals": [
-                {
-                    "Ref": "DeploymentMode"
-                },
-                "Cluster"
-            ]
-        }
-    },
     "Resources": {
-        "VPCStack": {
+        "BastionHost": {
             "Type": "AWS::CloudFormation::Stack",
-            "Condition": "StandaloneInstallation",
             "Properties": {
                 "TemplateURL": {
-                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template"
+                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-tableau-server/templates/windows-bastion.template"
                 },
                 "Parameters": {
-                    "AvailabilityZones": {
-                        "Fn::Join": [
-                            ",",
-                            {
-                                "Ref": "AvailabilityZones"
-                            }
-                        ]
-                    },
-                    "KeyPairName": {
-                        "Ref": "KeyPairName"
-                    },
-                    "NATInstanceType": "t2.small",
-                    "NumberOfAZs": "2",
-                    "PublicSubnet1CIDR": {
-                        "Fn::FindInMap": [
-                            "DefaultConfiguration",
-                            "NetworkConfiguration",
-                            "PublicSubnet1CIDR"
-                        ]
-                    },
-                    "PublicSubnet2CIDR": {
-                        "Fn::FindInMap": [
-                            "DefaultConfiguration",
-                            "NetworkConfiguration",
-                            "PublicSubnet2CIDR"
-                        ]
-                    },
-                    "CreatePrivateSubnets": "false",
-                    "VPCCIDR": {
-                        "Fn::FindInMap": [
-                            "DefaultConfiguration",
-                            "NetworkConfiguration",
-                            "VPCCIDR"
-                        ]
-                    }
-                }
-            }
-        },
-        "VPCClusterStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "Condition": "ClusterInstallation",
-            "Properties": {
-                "TemplateURL": {
-                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template"
-                },
-                "Parameters": {
-                    "AvailabilityZones": {
-                        "Fn::Join": [
-                            ",",
-                            {
-                                "Ref": "AvailabilityZones"
-                            }
-                        ]
-                    },
-                    "KeyPairName": {
-                        "Ref": "KeyPairName"
-                    },
-                    "NATInstanceType": "t2.small",
-                    "NumberOfAZs": "3",
-                    "PrivateSubnet1ACIDR": {
-                        "Fn::FindInMap": [
-                            "DefaultConfiguration",
-                            "NetworkConfiguration",
-                            "PrivateSubnet1CIDR"
-                        ]
-                    },
-                    "PrivateSubnet2ACIDR": {
-                        "Fn::FindInMap": [
-                            "DefaultConfiguration",
-                            "NetworkConfiguration",
-                            "PrivateSubnet2CIDR"
-                        ]
-                    },
-                    "PrivateSubnet3ACIDR": {
-                        "Fn::FindInMap": [
-                            "DefaultConfiguration",
-                            "NetworkConfiguration",
-                            "PrivateSubnet3CIDR"
-                        ]
-                    },
-                    "PublicSubnet1CIDR": {
-                        "Fn::FindInMap": [
-                            "DefaultConfiguration",
-                            "NetworkConfiguration",
-                            "PublicSubnet1CIDR"
-                        ]
-                    },
-                    "PublicSubnet2CIDR": {
-                        "Fn::FindInMap": [
-                            "DefaultConfiguration",
-                            "NetworkConfiguration",
-                            "PublicSubnet2CIDR"
-                        ]
-                    },
-                    "PublicSubnet3CIDR": {
-                        "Fn::FindInMap": [
-                            "DefaultConfiguration",
-                            "NetworkConfiguration",
-                            "PublicSubnet3CIDR"
-                        ]
-                    },
-                    "VPCCIDR": {
-                        "Fn::FindInMap": [
-                            "DefaultConfiguration",
-                            "NetworkConfiguration",
-                            "VPCCIDR"
-                        ]
-                    },
-                    "CreatePrivateSubnets": "true"
-                }
-            }
-        },
-        "TableauSnowflakeStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "Condition": "StandaloneInstallation",
-            "Properties": {
-                "TemplateURL": {
-                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/tableau-snowflake.template.json"
-                },
-                "Parameters": {
-                    "AcceptEULA": {
-                        "Ref": "AcceptEULA"
-                    },
-                    "AMIOS": {
-                        "Ref": "AMIOS"
-                    },
                     "InstanceType": {
-                        "Ref": "InstanceType"
+                        "Fn::FindInMap": [
+                            "DefaultConfiguration",
+                            "MachineConfiguration",
+                            "BastionInstanceType"
+                        ]
                     },
                     "KeyPairName": {
                         "Ref": "KeyPairName"
-                    },
-                    "Password": {
-                        "Ref": "Password"
-                    },
-                    "PublicSubnetID": {
-                        "Fn::GetAtt": ["VPCStack", "Outputs.PublicSubnet1ID"]
-                    },
-                    "QSS3BucketName": {
-                        "Ref": "QSS3BucketName"
-                    },
-                    "QSS3KeyPrefix": {
-                        "Ref": "QSS3KeyPrefix"
-                    },
-                    "RegCity": {
-                        "Ref": "RegCity"
-                    },
-                    "RegCompany": {
-                        "Ref": "RegCompany"
-                    },
-                    "RegCountry": {
-                        "Ref": "RegCountry"
-                    },
-                    "RegDepartment": {
-                        "Ref": "RegDepartment"
-                    },
-                    "RegEmail": {
-                        "Ref": "RegEmail"
-                    },
-                    "RegFirstName": {
-                        "Ref": "RegFirstName"
-                    },
-                    "RegIndustry": {
-                        "Ref": "RegIndustry"
-                    },
-                    "RegLastName": {
-                        "Ref": "RegLastName"
-                    },
-                    "RegPhone": {
-                        "Ref": "RegPhone"
-                    },
-                    "RegState": {
-                        "Ref": "RegState"
-                    },
-                    "RegTitle": {
-                        "Ref": "RegTitle"
-                    },
-                    "RegZip": {
-                        "Ref": "RegZip"
                     },
                     "SourceCIDR": {
                         "Ref": "SourceCIDR"
                     },
+                    "SubnetId": {
+                        "Ref": "PublicSubnetID"
+                    },
+                    "VPCID": {
+                        "Ref": "VPCID"
+                    }
+                }
+            }
+        },
+        "TableauClusterStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": [
+                "BastionHost"
+            ],
+            "Properties": {
+                "TemplateURL": {
+                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-tableau-server/templates/tableau-cluster-windows.template"
+                },
+                "Parameters": {
+                    "AWSPublicFQDN": "",
                     "TableauServerAdminPassword": {
                         "Ref": "TableauServerAdminPassword"
                     },
                     "TableauServerAdminUser": {
                         "Ref": "TableauServerAdminUser"
                     },
-                    "TableauServerLicenseKey": {
-                        "Ref": "TableauServerLicenseKey"
-                    },
-                    "Username": {
-                        "Ref": "Username"
-                    },
-                    "VPCID": {
-                        "Fn::GetAtt": ["VPCStack", "Outputs.VPCID"]
-                    },
-                    "SnowflakeHost":{
-                        "Ref": "SnowflakeHost"
-                    },
-                    "SnowflakeUsername":{
-                        "Ref": "SnowflakeUsername"
-                    },
-                    "SnowflakePassword":{
-                        "Ref": "SnowflakePassword"
-                    },
-                    "SnowflakeDatabaseName":{
-                        "Ref": "SnowflakeDatabaseName"
-                    }
-                }
-            }
-        },
-        "TableauClusterSnowflakeStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "Condition": "ClusterInstallation",
-            "Properties": {
-                "TemplateURL": {
-                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/tableau-cluster-snowflake.template.json"
-                },
-                "Parameters": {
-                    "AcceptEULA": {
-                        "Ref": "AcceptEULA"
-                    },
-                    "AMIOS": {
-                        "Ref": "AMIOS"
-                    },
-                    "InstanceType": {
-                        "Ref": "InstanceType"
-                    },
                     "KeyPairName": {
                         "Ref": "KeyPairName"
                     },
-                    "Password": {
-                        "Ref": "Password"
+                    "PrimaryIP": {
+                        "Fn::FindInMap": [
+                            "DefaultConfiguration",
+                            "NetworkConfiguration",
+                            "PrimaryIP"
+                        ]
                     },
-                    "PublicSubnetID": {
-                        "Fn::GetAtt": ["VPCClusterStack", "Outputs.PublicSubnet1ID"]
-                    },
-                    "QSS3BucketName": {
-                        "Ref": "QSS3BucketName"
-                    },
-                    "QSS3KeyPrefix": {
-                        "Ref": "QSS3KeyPrefix"
-                    },
-                    "RegCity": {
-                        "Ref": "RegCity"
-                    },
-                    "RegCompany": {
-                        "Ref": "RegCompany"
-                    },
-                    "RegCountry": {
-                        "Ref": "RegCountry"
-                    },
-                    "RegDepartment": {
-                        "Ref": "RegDepartment"
-                    },
-                    "RegEmail": {
-                        "Ref": "RegEmail"
-                    },
-                    "RegFirstName": {
-                        "Ref": "RegFirstName"
-                    },
-                    "RegIndustry": {
-                        "Ref": "RegIndustry"
-                    },
-                    "RegLastName": {
-                        "Ref": "RegLastName"
-                    },
-                    "RegPhone": {
-                        "Ref": "RegPhone"
-                    },
-                    "RegState": {
-                        "Ref": "RegState"
-                    },
-                    "RegTitle": {
-                        "Ref": "RegTitle"
-                    },
-                    "RegZip": {
-                        "Ref": "RegZip"
-                    },
-                    "SourceCIDR": {
-                        "Ref": "SourceCIDR"
-                    },
-                    "TableauServerAdminPassword": {
-                        "Ref": "TableauServerAdminPassword"
-                    },
-                    "TableauServerAdminUser": {
-                        "Ref": "TableauServerAdminUser"
-                    },
-                    "TableauServerLicenseKey": {
-                        "Ref": "TableauServerLicenseKey"
-                    },
-                    "Username": {
-                        "Ref": "Username"
-                    },
-                    "VPCID": {
-                        "Fn::GetAtt": ["VPCClusterStack", "Outputs.VPCID"]
-                    },
-                    "SnowflakeHost":{
-                        "Ref": "SnowflakeHost"
-                    },
-                    "SnowflakeUsername":{
-                        "Ref": "SnowflakeUsername"
-                    },
-                    "SnowflakePassword":{
-                        "Ref": "SnowflakePassword"
-                    },
-                    "SnowflakeDatabaseName":{
-                        "Ref": "SnowflakeDatabaseName"
+                    "PrimaryPublicSubnetID": {
+                        "Ref": "PublicSubnetID"
                     },
                     "PrimarySubnetID": {
-                        "Fn::GetAtt": [
-                            "VPCClusterStack",
-                            "Outputs.PrivateSubnet1AID"
+                        "Ref": "PrimarySubnetID"
+                    },
+                    "RegCity": {
+                        "Ref": "RegCity"
+                    },
+                    "RegCompany": {
+                        "Ref": "RegCompany"
+                    },
+                    "RegCountry": {
+                        "Ref": "RegCountry"
+                    },
+                    "RegDepartment": {
+                        "Ref": "RegDepartment"
+                    },
+                    "RegEmail": {
+                        "Ref": "RegEmail"
+                    },
+                    "RegFirstName": {
+                        "Ref": "RegFirstName"
+                    },
+                    "RegIndustry": {
+                        "Ref": "RegIndustry"
+                    },
+                    "RegLastName": {
+                        "Ref": "RegLastName"
+                    },
+                    "RegPhone": {
+                        "Ref": "RegPhone"
+                    },
+                    "RegState": {
+                        "Ref": "RegState"
+                    },
+                    "RegTitle": {
+                        "Ref": "RegTitle"
+                    },
+                    "RegZip": {
+                        "Ref": "RegZip"
+                    },
+                    "SSLCertificateARN": "",
+                    "SourceCIDR": {
+                        "Ref": "SourceCIDR"
+                    },
+                    "TableauServerLicenseKey": {
+                        "Ref": "TableauServerLicenseKey"
+                    },
+                    "VPCID": {
+                        "Ref": "VPCID"
+                    },
+                    "Worker1IP": {
+                        "Fn::FindInMap": [
+                            "DefaultConfiguration",
+                            "NetworkConfiguration",
+                            "Worker1IP"
                         ]
                     },
                     "Worker1PublicSubnetID": {
-                        "Fn::GetAtt": [
-                            "VPCClusterStack",
-                            "Outputs.PublicSubnet2ID"
-                        ]
+                        "Ref": "Worker1PublicSubnetID"
                     },
                     "Worker1SubnetID": {
-                        "Fn::GetAtt": [
-                            "VPCClusterStack",
-                            "Outputs.PrivateSubnet2AID"
+                        "Ref": "Worker1SubnetID"
+                    },
+                    "Worker2IP": {
+                        "Fn::FindInMap": [
+                            "DefaultConfiguration",
+                            "NetworkConfiguration",
+                            "Worker2IP"
                         ]
                     },
                     "Worker2PublicSubnetID": {
-                        "Fn::GetAtt": [
-                            "VPCClusterStack",
-                            "Outputs.PublicSubnet3ID"
-                        ]
+                        "Ref": "Worker2PublicSubnetID"
                     },
                     "Worker2SubnetID": {
-                        "Fn::GetAtt": [
-                            "VPCClusterStack",
-                            "Outputs.PrivateSubnet3AID"
-                        ]
+                        "Ref": "Worker2SubnetID"
+                    }
+                }
+            }
+        },
+        "TableauClusterSecurityGroupBastionRDPIngress": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "DependsOn": [
+                "BastionHost",
+                "TableauClusterStack"
+            ],
+            "Properties": {
+                "GroupId": {
+                    "Fn::GetAtt": [
+                        "TableauClusterStack",
+                        "Outputs.SecurityGroup"
+                    ]
+                },
+                "IpProtocol": "tcp",
+                "FromPort": 3389,
+                "ToPort": 3389,
+                "SourceSecurityGroupId": {
+                    "Fn::GetAtt": [
+                        "BastionHost",
+                        "Outputs.SecurityGroup"
+                    ]
+                }
+            }
+        },
+        "TableauClusterSecurityGroupBastionWebIngress": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "DependsOn": [
+                "BastionHost",
+                "TableauClusterStack"
+            ],
+            "Properties": {
+                "GroupId": {
+                    "Fn::GetAtt": [
+                        "TableauClusterStack",
+                        "Outputs.SecurityGroup"
+                    ]
+                },
+                "IpProtocol": "tcp",
+                "FromPort": 80,
+                "ToPort": 80,
+                "SourceSecurityGroupId": {
+                    "Fn::GetAtt": [
+                        "BastionHost",
+                        "Outputs.SecurityGroup"
+                    ]
+                }
+            }
+        },
+        "SnowflakeConfigStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": [
+                "TableauClusterStack"
+            ],
+            "Properties": {
+                "TemplateURL": {
+                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/snowflake-config.template.json"
+                },
+                "Parameters": {
+                    "TableauServerAdminPassword": {
+                        "Ref": "TableauServerAdminPassword"
+                    },
+                    "TableauServerAdminUser": {
+                        "Ref": "TableauServerAdminUser"
+                    },
+                    "TableauInstanceId": {
+                                "Fn::GetAtt": [
+                                    "TableauClusterStack",
+                                    "Outputs.PrimaryInstanceID"
+                                ]
+                    },
+                    "SnowflakeHost":{
+                        "Ref": "SnowflakeHost"
+                    },
+                    "SnowflakeUsername":{
+                        "Ref": "SnowflakeUsername"
+                    },
+                    "SnowflakePassword":{
+                        "Ref": "SnowflakePassword"
+                    },
+                    "SnowflakeDatabaseName":{
+                        "Ref": "SnowflakeDatabaseName"
                     }
                 }
             }
         }
     },
     "Outputs": {
-        "VPCID": {
-            "Description": "VPC ID",
-            "Value": {
-                "Fn::If": [
-                    "ClusterInstallation",
-                    {
-                        "Fn::GetAtt": [
-                            "VPCClusterStack",
-                            "Outputs.VPCID"
-                        ]
-                    },
-                    {
-                        "Fn::GetAtt": [
-                            "VPCStack",
-                            "Outputs.VPCID"
-                        ]
-                    }
-                ]
-            }
-        },
         "InstanceID": {
             "Description": "EC2 InstanceID of the instance running Tableau Server",
             "Value": {
-                "Fn::If": [
-                    "ClusterInstallation",
-                    {
-                        "Fn::GetAtt": [
-                            "TableauClusterSnowflakeStack",
-                            "Outputs.InstanceID"
-                        ]
-                    },
-                    {
-                        "Fn::GetAtt": [
-                            "TableauSnowflakeStack",
-                            "Outputs.InstanceID"
-                        ]
-                    }
+                "Fn::GetAtt": [
+                    "TableauClusterStack",
+                    "Outputs.PrimaryInstanceID"
                 ]
             }
         },
         "PublicIPAddress": {
             "Description": "Public IP Address of instance running Tableau Server",
             "Value": {
-                "Fn::If": [
-                    "ClusterInstallation",
-                    {
-                        "Fn::GetAtt": [
-                            "TableauClusterSnowflakeStack",
-                            "Outputs.PublicIPAddress"
-                        ]
-                    },
-                    {
-                        "Fn::GetAtt": [
-                            "TableauSnowflakeStack",
-                            "Outputs.PublicIPAddress"
-                        ]
-                    }
+                "Fn::GetAtt": [
+                    "TableauClusterStack",
+                    "Outputs.LoadBalancerID"
                 ]
             }
         },
         "TableauServicesManagerURL": {
             "Description": "URL for the TSM Web UI",
             "Value": {
-                "Fn::If": [
-                    "ClusterInstallation",
-                    {
-                        "Fn::GetAtt": [
-                            "TableauClusterSnowflakeStack",
-                            "Outputs.TableauServicesManagerURL"
-                        ]
-                    },
-                    {
-                        "Fn::GetAtt": [
-                            "TableauSnowflakeStack",
-                            "Outputs.TableauServicesManagerURL"
-                        ]
-                    }
+                "Fn::GetAtt": [
+                    "TableauClusterStack",
+                    "Outputs.LoadBalancerDNSName"
                 ]
             }
         },
         "TableauServerURL": {
             "Description": "URL for the Tableau Server",
             "Value": {
-                "Fn::If": [
-                    "ClusterInstallation",
-                    {
-                        "Fn::GetAtt": [
-                            "TableauClusterSnowflakeStack",
-                            "Outputs.TableauServerURL"
-                        ]
-                    },
-                    {
-                        "Fn::GetAtt": [
-                            "TableauSnowflakeStack",
-                            "Outputs.TableauServerURL"
-                        ]
-                    }
+                "Fn::GetAtt": [
+                    "TableauClusterStack",
+                    "Outputs.LoadBalancerDNSName"
                 ]
             }
         }

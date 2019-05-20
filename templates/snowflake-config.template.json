@@ -132,7 +132,7 @@
                                 "runCommand": [
                                     "Import-Module BitsTransfer",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/update-datasource.py\" -Destination \"C:\\tabsetup\\update-datasource.py\"",
-                                    "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/snowflake.tds\" -Destination \"C:\\tabsetup\\snowflake.tds\"",
+                                    "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/yellow_trip_data.tds\" -Destination \"C:\\tabsetup\\yellow_trip_data.tds\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/QUERY_HISTORY.tds\" -Destination \"C:\\tabsetup\\QUERY_HISTORY.tds\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/STORAGE_USAGE.tds\" -Destination \"C:\\tabsetup\\STORAGE_USAGE.tds\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/WAREHOUSE_METERING_HISTORY.tds\" -Destination \"C:\\tabsetup\\WAREHOUSE_METERING_HISTORY.tds\"",
