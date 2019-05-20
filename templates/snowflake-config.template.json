@@ -157,11 +157,21 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "3_InstallSnowsql",
+                            "name": "3a_InstallSnowsqlMSI",
                             "inputs": {
                                 "runCommand": [
                                     "msiexec /i snowsql.msi /q",
                                     "msiexec /i snowflake-odbc-driver.msi /q",
+                                    "& \"c:\\Program Files\\Snowflake SnowSQL\\snowsql.exe\" --config \"c:\\tabsetup\\config-temp\" -c quickstart -f \"c:\\tabsetup\\snowsetup.txt\""
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "3b_RunSnowsqlSetup",
+                            "inputs": {
+                                "runCommand": [
                                     "& \"c:\\Program Files\\Snowflake SnowSQL\\snowsql.exe\" --config \"c:\\tabsetup\\config-temp\" -c quickstart -f \"c:\\tabsetup\\snowsetup.txt\""
                                 ],
                                 "workingDirectory": "c:\\tabsetup"
