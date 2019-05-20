@@ -135,7 +135,8 @@
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/snowflake.tds\" -Destination \"C:\\tabsetup\\snowflake.tds\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/QUERY_HISTORY.tds\" -Destination \"C:\\tabsetup\\QUERY_HISTORY.tds\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/STORAGE_USAGE.tds\" -Destination \"C:\\tabsetup\\STORAGE_USAGE.tds\"",
-                                    "Start-BitsTransfer -Source \"http://sfc-snowsql-updates.s3.us-west-2.amazonaws.com/bootstrap/1.1/windows_x86_64/snowsql-1.1.76-windows_x86_64.msi\" -Destination \"C:\\tabsetup\\WAREHOUSE_METERING_HISTORY.tds\"",
+                                    "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/WAREHOUSE_METERING_HISTORY.tds\" -Destination \"C:\\tabsetup\\WAREHOUSE_METERING_HISTORY.tds\"",
+                                    "Start-BitsTransfer -Source \"http://sfc-snowsql-updates.s3.us-west-2.amazonaws.com/bootstrap/1.1/windows_x86_64/snowsql-1.1.76-windows_x86_64.msi\" -Destination \"C:\\tabsetup\\snowsql.msi\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/snowflake-odbc-driver.msi\" -Destination \"C:\\tabsetup\\snowflake-odbc-driver.msi\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/snowsetup.txt\" -Destination \"C:\\tabsetup\\snowsetup.txt\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/quickstart.twb\" -Destination \"C:\\tabsetup\\quickstart.twb\""
@@ -159,18 +160,27 @@
                             "name": "3_InstallSnowsql",
                             "inputs": {
                                 "runCommand": [
-                                    "cmd.exe /c msiexec /i snowsql.msi /q",
-                                    "cmd.exe /c msiexec /i snowflake-odbc-driver.msi /q",
-                                    "cmd.exe /c \"c:\\Program Files\\Snowflake SnowSQL\\snowsql.exe\" --config \"c:\\tabsetup\\config-temp\" -c quickstart -f \"c:\\tabsetup\\snowsetup.txt\"",
-                                    "cmd.exe /c del c:\\tabsetup\\config-temp"
-
+                                    "msiexec /i snowsql.msi /q",
+                                    "msiexec /i snowflake-odbc-driver.msi /q",
+                                    "$command = $(\"`\"c:\\Program Files\\Snowflake SnowSQL\\snowsql.exe`\" --config `\"c:\\tabsetup\\config-temp`\" -c quickstart -f `\"c:\\tabsetup\\snowsetup.txt`\"\")",
+                                    "cmd.exe /c \"`\"$command`\"\""
                                 ],
                                 "workingDirectory": "c:\\tabsetup"
                             }
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "4_InstallPythonDependencies",
+                            "name": "4_CleanupSnowflakeConfig",
+                            "inputs": {
+                                "runCommand": [
+                                    "cmd.exe /c del c:\\tabsetup\\config-temp"
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "5_InstallPythonDependencies",
                             "inputs": {
                                 "runCommand": [
                                     "cmd.exe /c \"C:\\Program Files\\Python36\\python.exe\" -m pip install tableaudocumentapi"
@@ -180,7 +190,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "5_UpdateSampleDatasource",
+                            "name": "6_UpdateSampleDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -204,7 +214,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "6_UpdateStorageUsageDatasource",
+                            "name": "7_UpdateStorageUsageDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -221,7 +231,16 @@
                                                 " > c:\\tabsetup\\update-storage-usage-datasource-output.txt 2>&1"
                                             ]
                                         ]
-                                    },
+                                    }
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "8_UpdateWarehouseHistoryDatasource",
+                            "inputs": {
+                                "runCommand": [
                                     {
                                         "Fn::Join": [
                                             " ",
@@ -243,7 +262,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "7_CreateSnowflakeSampleProject",
+                            "name": "9_CreateSnowflakeSampleProject",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -267,7 +286,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "8_CreateSnowflakeAdminProject",
+                            "name": "10_CreateSnowflakeAdminProject",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -291,7 +310,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "9_PublishSnowflakeDatasource",
+                            "name": "11_PublishSnowflakeDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -322,7 +341,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "10_PublishWarehousingMeteringDatasource",
+                            "name": "12_PublishWarehousingMeteringDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -353,7 +372,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "11_PublishStorageDatasource",
+                            "name": "13_PublishStorageDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -384,7 +403,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "12_PublishQueryDatasource",
+                            "name": "14_PublishQueryDatasource",
                             "inputs": {
                                 "runCommand": [
                                     {
@@ -415,7 +434,7 @@
                         },
                         {
                             "action": "aws:runPowerShellScript",
-                            "name": "13_PublishSampleDashboard",
+                            "name": "15_PublishSampleDashboard",
                             "inputs": {
                                 "runCommand": [
                                     {
