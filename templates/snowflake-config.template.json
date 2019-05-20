@@ -522,6 +522,7 @@
                                 "                DocumentName=ssmDocument,",
                                 "                TimeoutSeconds=3600,",
                                 "                Comment='Snowflake config for Tableau server',",
+                                "                CloudWatchOutputConfig={'CloudWatchOutputEnabled': True}",
                                 "                MaxConcurrency='50',",
                                 "                MaxErrors='5',",
                                 "            )",
