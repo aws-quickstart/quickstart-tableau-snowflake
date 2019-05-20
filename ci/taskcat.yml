@@ -19,9 +19,8 @@ global:
   reporting: true
  
 tests:
-  quickstart-tableau-snowflaket1:
-    parameter_input: quickstart-tableau-snowflake-example-params1.json
-    template_file: quickstart-tableau-snowflake-example1.template
-  quickstart-tableau-snowflaket2:
-    parameter_input: quickstart-tableau-snowflake-example-params2.json
-    template_file: quickstart-tableau-snowflake-example2.template
+  tableau-snowflaket1:
+    parameter_input: single-windows.json
+    template_file: tableau-snowflake-master.template.json
+    regions:
+      - us-east-1

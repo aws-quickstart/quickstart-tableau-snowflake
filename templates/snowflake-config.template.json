@@ -1,0 +1,591 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "CloudFormation Template for TSM-based Tableau Server on Windows",
+    "Parameters": {
+        "TableauInstanceId": {
+            "Description": "Instance ID of the Tableau Server",
+            "Type": "AWS::EC2::Instance::Id"
+        },
+        "TableauServerAdminPassword": {
+            "Description": "The password of the initial administrator for Tableau Server",
+            "MinLength": "1",
+            "NoEcho": "true",
+            "Type": "String"
+        },
+        "TableauServerAdminUser": {
+            "Description": "The name of the initial administrator for Tableau Server",
+            "MinLength": "1",
+            "Type": "String"
+        },
+        "SnowflakeHost": {
+            "Description": "URL host name of your Snowflake instance.  Do not include leading 'https:\\'",
+            "Type": "String",
+            "AllowedPattern": "^(?!https:).*(\\.snowflakecomputing\\.com)$"
+        },
+        "SnowflakeUsername": {
+            "Description": "Username for your Snowflake account",
+            "Type": "String"
+        },
+        "SnowflakePassword": {
+            "Description": "Password for your Snowflake account",
+            "NoEcho": "true",
+            "Type": "String"
+        },
+        "SnowflakeDatabaseName": {
+            "Description": "Name of the Snowflake database you want to connect to",
+            "Type": "String"
+        }
+    },
+    "Mappings": {
+        "DefaultConfiguration": {
+            "InstallationConfig": {
+                "InstallationBucket": "tableau-snowflake-quickstart",
+                "InstallationExecutable": "TableauServer-64bit.exe"
+            }
+        }
+    },
+    "Resources": {
+        "SnowflakeConfigDocument": {
+            "Type" : "AWS::SSM::Document",
+            "Properties" : {
+                "DocumentType": "Command",
+                "Content" : {
+                    "schemaVersion": "2.2",
+                    "description": "Snowflake configuration for Tableau server",
+                    "parameters": {
+                        "InstallationBucket": {
+                            "type": "String",
+                            "description": "S3 bucket containing installation files",
+                            "default": {
+                                "Fn::FindInMap": [
+                                    "DefaultConfiguration",
+                                    "InstallationConfig",
+                                    "InstallationBucket"
+                                ]
+                            }
+                        },
+                        "SnowflakeAccountName": {
+                            "type": "String",
+                            "description": "Snowflake account name",
+                            "default": {
+                                "Fn::Select": [
+                                    "0",
+                                    {
+                                        "Fn::Split": [
+                                            ".snowflakecomputing",
+                                            {
+                                                "Ref": "SnowflakeHost"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        "SnowflakeHost": {
+                            "type": "String",
+                            "description": "Snowflake host",
+                            "default": {
+                                "Ref": "SnowflakeHost"
+                            }
+                        },
+                        "SnowflakeUsername": {
+                            "type": "String",
+                            "description": "Snowflake username",
+                            "default": {
+                                "Ref": "SnowflakeUsername"
+                            }
+                        },
+                        "SnowflakePassword": {
+                            "type": "String",
+                            "description": "Snowflake password",
+                            "default": {
+                                "Ref": "SnowflakePassword"
+                            }
+                        },
+                        "SnowflakeDatabaseName": {
+                            "type": "String",
+                            "description": "Snowflake database name",
+                            "default": {
+                                "Ref": "SnowflakeDatabaseName"
+                            }
+                        },
+                        "TableauServerAdminUser": {
+                            "type": "String",
+                            "description": "Tableau server admin user",
+                            "default": {
+                                "Ref": "TableauServerAdminUser"
+                            }
+                        },
+                        "TableauServerAdminPassword": {
+                            "type": "String",
+                            "description": "Tableau server admin password",
+                            "default": {
+                                "Ref": "TableauServerAdminPassword"
+                            }
+                        }
+                    },
+                    "mainSteps": [
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "1-DownloadSnowflakeConfigFiles",
+                            "inputs": {
+                                "runCommand": [
+                                    "Import-Module BitsTransfer",
+                                    "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/update-datasource.py\" -Destination \"C:\\tabsetup\\update-datasource.py\"",
+                                    "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/snowflake.tds\" -Destination \"C:\\tabsetup\\snowflake.tds\"",
+                                    "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/QUERY_HISTORY.tds\" -Destination \"C:\\tabsetup\\QUERY_HISTORY.tds\"",
+                                    "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/STORAGE_USAGE.tds\" -Destination \"C:\\tabsetup\\STORAGE_USAGE.tds\"",
+                                    "Start-BitsTransfer -Source \"http://sfc-snowsql-updates.s3.us-west-2.amazonaws.com/bootstrap/1.1/windows_x86_64/snowsql-1.1.76-windows_x86_64.msi\" -Destination \"C:\\tabsetup\\WAREHOUSE_METERING_HISTORY.tds\"",
+                                    "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/snowflake-odbc-driver.msi\" -Destination \"C:\\tabsetup\\snowflake-odbc-driver.msi\"",
+                                    "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/snowsetup.txt\" -Destination \"C:\\tabsetup\\snowsetup.txt\"",
+                                    "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/quickstart.twb\" -Destination \"C:\\tabsetup\\quickstart.twb\""
+                                ]
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "2-SaveTemporarySnowflakeCredentials",
+                            "inputs": {
+                                "runCommand": [
+                                    "Add-Content c:\\tabsetup\\config-temp \"[connections.quickstart]\" -Encoding UTF8",
+                                    "Add-Content c:\\tabsetup\\config-temp \"accountname = {{SnowflakeAccountName}}\" -Encoding UTF8",
+                                    "Add-Content c:\\tabsetup\\config-temp \"username = {{SnowflakeUsername}}\" -Encoding UTF8",
+                                    "Add-Content c:\\tabsetup\\config-temp \"password = {{SnowflakePassword}}\" -Encoding UTF8"
+                                ]
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "3-InstallSnowsql",
+                            "inputs": {
+                                "runCommand": [
+                                    "cmd.exe /c msiexec /i snowsql.msi /q",
+                                    "cmd.exe /c msiexec /i snowflake-odbc-driver.msi /q",
+                                    "cmd.exe /c \"c:\\Program Files\\Snowflake SnowSQL\\snowsql.exe\" --config \"c:\\tabsetup\\config-temp\" -c quickstart -f \"c:\\tabsetup\\snowsetup.txt\"",
+                                    "cmd.exe /c del c:\\tabsetup\\config-temp"
+
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "4-InstallPythonDependencies",
+                            "inputs": {
+                                "runCommand": [
+                                    "cmd.exe /c \"C:\\Program Files\\Python36\\python.exe\" -m pip install tableaudocumentapi"
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "5-UpdateSampleDatasource",
+                            "inputs": {
+                                "runCommand": [
+                                    {
+                                        "Fn::Join": [
+                                            " ",
+                                            [
+                                                "cmd.exe /c",
+                                                "\"C:\\Program Files\\Python36\\python.exe\"",
+                                                "update-datasource.py",
+                                                "--filename c:\\tabsetup\\snowflake.tds",
+                                                "--server {{SnowflakeHost}}",
+                                                "--dbname {{SnowflakeDatabaseName}}",
+                                                "--username {{SnowflakeUsername}}",
+                                                " > c:\\tabsetup\\update-sample-datasource-output.txt 2>&1"
+                                            ]
+                                        ]
+                                    }
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "6-UpdateStorageUsageDatasource",
+                            "inputs": {
+                                "runCommand": [
+                                    {
+                                        "Fn::Join": [
+                                            " ",
+                                            [
+                                                "cmd.exe /c",
+                                                "\"C:\\Program Files\\Python36\\python.exe\"",
+                                                "update-datasource.py",
+                                                "--filename c:\\tabsetup\\STORAGE_USAGE.tds",
+                                                "--server {{SnowflakeHost}}",
+                                                "--dbname {{SnowflakeDatabaseName}}",
+                                                "--username {{SnowflakeUsername}}",
+                                                " > c:\\tabsetup\\update-storage-usage-datasource-output.txt 2>&1"
+                                            ]
+                                        ]
+                                    },
+                                    {
+                                        "Fn::Join": [
+                                            " ",
+                                            [
+                                                "cmd.exe /c",
+                                                "\"C:\\Program Files\\Python36\\python.exe\"",
+                                                "update-datasource.py",
+                                                "--filename c:\\tabsetup\\WAREHOUSE_METERING_HISTORY.tds",
+                                                "--server {{SnowflakeHost}}",
+                                                "--dbname {{SnowflakeDatabaseName}}",
+                                                "--username {{SnowflakeUsername}}",
+                                                " > c:\\tabsetup\\update-warehouse-history-datasource-output.txt 2>&1"
+                                            ]
+                                        ]
+                                    }
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "7-CreateSnowflakeSampleProject",
+                            "inputs": {
+                                "runCommand": [
+                                    {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "powershell.exe -ExecutionPolicy RemoteSigned -Command \"",
+                                                "& D:\\tableau\\*\\bin*\\tabcmd.exe createproject -n Snowflake_Samples ",
+                                                "--server http://localhost ",
+                                                "--username {{TableauServerAdminUser}}",
+                                                " ",
+                                                "--password {{TableauServerAdminPassword}}",
+                                                "\"",
+                                                " > c:\\tabsetup\\create-project-output.txt 2>&1"
+                                            ]
+                                        ]
+                                    }
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "8-CreateSnowflakeAdminProject",
+                            "inputs": {
+                                "runCommand": [
+                                    {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "powershell.exe -ExecutionPolicy RemoteSigned -Command \"",
+                                                "& D:\\tableau\\*\\bin*\\tabcmd.exe createproject -n Snowflake_Admin ",
+                                                "--server http://localhost ",
+                                                "--username {{TableauServerAdminUser}}",
+                                                " ",
+                                                "--password {{TableauServerAdminPassword}}",
+                                                "\"",
+                                                " > c:\\tabsetup\\create-project-output.txt 2>&1"
+                                            ]
+                                        ]
+                                    }
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "9-PublishSnowflakeDatasource",
+                            "inputs": {
+                                "runCommand": [
+                                    {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "powershell.exe -ExecutionPolicy RemoteSigned -Command \"",
+                                                "& D:\\tableau\\*\\bin*\\tabcmd.exe publish c:\\tabsetup\\snowflake.tds ",
+                                                "--server http://localhost ",
+                                                "--project Snowflake_Samples ",
+                                                "--username {{TableauServerAdminUser}}",
+                                                " ",
+                                                "--password {{TableauServerAdminPassword}}",
+                                                " ",
+                                                "--db-username {{SnowflakeUsername}}",
+                                                " ",
+                                                "--db-password {{SnowflakePassword}}",
+                                                " ",
+                                                "--save-db-password",
+                                                "\"",
+                                                " > c:\\tabsetup\\publish-datasource-output.txt 2>&1"
+                                            ]
+                                        ]
+                                    }
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "10-PublishWarehousingMeteringDatasource",
+                            "inputs": {
+                                "runCommand": [
+                                    {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "powershell.exe -ExecutionPolicy RemoteSigned -Command \"",
+                                                "& D:\\tableau\\*\\bin*\\tabcmd.exe publish c:\\tabsetup\\WAREHOUSE_METERING_HISTORY.tds ",
+                                                "--server http://localhost ",
+                                                "--project Snowflake_Admin ",
+                                                "--username {{TableauServerAdminUser}}",
+                                                " ",
+                                                "--password {{TableauServerAdminPassword}}",
+                                                " ",
+                                                "--db-username {{SnowflakeUsername}}",
+                                                " ",
+                                                "--db-password {{SnowflakePassword}}",
+                                                " ",
+                                                "--save-db-password",
+                                                "\"",
+                                                " > c:\\tabsetup\\publish-warehouse-metering-datasource-output.txt 2>&1"
+                                            ]
+                                        ]
+                                    }
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "11-PublishStorageDatasource",
+                            "inputs": {
+                                "runCommand": [
+                                    {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "powershell.exe -ExecutionPolicy RemoteSigned -Command \"",
+                                                "& D:\\tableau\\*\\bin*\\tabcmd.exe publish c:\\tabsetup\\STORAGE_USAGE.tds ",
+                                                "--server http://localhost ",
+                                                "--project Snowflake_Admin ",
+                                                "--username {{TableauServerAdminUser}}",
+                                                " ",
+                                                "--password {{TableauServerAdminPassword}}",
+                                                " ",
+                                                "--db-username {{SnowflakeUsername}}",
+                                                " ",
+                                                "--db-password {{SnowflakePassword}}",
+                                                " ",
+                                                "--save-db-password",
+                                                "\"",
+                                                " > c:\\tabsetup\\publish-storage-usage-datasource-output.txt 2>&1"
+                                            ]
+                                        ]
+                                    }
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "12-PublishQueryDatasource",
+                            "inputs": {
+                                "runCommand": [
+                                    {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "powershell.exe -ExecutionPolicy RemoteSigned -Command \"",
+                                                "& D:\\tableau\\*\\bin*\\tabcmd.exe publish c:\\tabsetup\\QUERY_HISTORY.tds ",
+                                                "--server http://localhost ",
+                                                "--project Snowflake_Admin ",
+                                                "--username {{TableauServerAdminUser}}",
+                                                " ",
+                                                "--password {{TableauServerAdminPassword}}",
+                                                " ",
+                                                "--db-username {{SnowflakeUsername}}",
+                                                " ",
+                                                "--db-password {{SnowflakePassword}}",
+                                                " ",
+                                                "--save-db-password",
+                                                "\"",
+                                                " > c:\\tabsetup\\publish-query-history-datasource-output.txt 2>&1"
+                                            ]
+                                        ]
+                                    }
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        },
+                        {
+                            "action": "aws:runPowerShellScript",
+                            "name": "13-PublishSampleDashboard",
+                            "inputs": {
+                                "runCommand": [
+                                    {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "powershell.exe -ExecutionPolicy RemoteSigned -Command \"",
+                                                "& D:\\tableau\\*\\bin*\\tabcmd.exe publish c:\\tabsetup\\quickstart.twb ",
+                                                "--server http://localhost ",
+                                                "--project Snowflake_Samples ",
+                                                "--username {{TableauServerAdminUser}}",
+                                                " ",
+                                                "--password {{TableauServerAdminPassword}}",
+                                                "\"",
+                                                " > c:\\tabsetup\\publish-workbook-output.txt 2>&1"
+                                            ]
+                                        ]
+                                    }
+                                ],
+                                "workingDirectory": "c:\\tabsetup"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "SSMSendCommandPolicy": {
+            "Type": "AWS::IAM::ManagedPolicy",
+            "Properties": {
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Action": [
+                                "ssm:SendCommand"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": "*"
+                        }
+                    ]
+                }
+            }
+        },
+        "SSMSendCommandLambdaRole": {
+            "DependsOn": [
+                "SSMSendCommandPolicy"
+            ],
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "Path": "/",
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": "lambda.amazonaws.com"
+                        },
+                        "Action": "sts:AssumeRole"
+                    }
+                },
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess",
+                    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+                    {
+                        "Ref": "SSMSendCommandPolicy"
+                    }
+                ]
+            }
+        },
+        "ExecuteSnowflakeDocumentLambda": {
+            "Type": "AWS::Lambda::Function",
+            "DependsOn": [
+                "SnowflakeConfigDocument",
+                "SSMSendCommandLambdaRole"
+            ],
+            "Properties": {
+                "Handler": "index.lambda_handler",
+                "Runtime": "python3.7",
+                "Code": {
+                    "ZipFile": {
+                        "Fn::Join": [
+                            "\n",
+                            [
+                                "import boto3",
+                                "import os, time,json",
+                                "import cfnresponse",
+                                "import logging",
+                                "",
+                                "def lambda_handler(event, context):",
+                                "    print('Received event: %s' % json.dumps(event))",
+                                "    status = cfnresponse.SUCCESS",
+                                "    try:",
+                                "        if event['RequestType'] == 'Delete':",
+                                "            cfnresponse.send(event, context, status, {})",
+                                "        else:",
+                                "            ssm = boto3.client('ssm')",
+                                "",
+                                "            instanceId = event['ResourceProperties']['InstanceId']",
+                                "            ssmDocument = event['ResourceProperties']['SSMDocument']",
+                                "            responseData = {}",
+                                "",
+                                "            response=ssm.send_command(",
+                                "                InstanceIds = [instanceId],",
+                                "                DocumentName=ssmDocument,",
+                                "                TimeoutSeconds=3600,",
+                                "                Comment='Snowflake config for Tableau server',",
+                                "                MaxConcurrency='50',",
+                                "                MaxErrors='5',",
+                                "            )",
+                                "",
+                                "            cmdId = response['Command']['CommandId']",
+                                "            responseData['CommandId'] = cmdId",
+                                "            print('Started snowflake config in CommandId: ' + cmdId)",
+                                "            cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData)",
+                                "    except Exception as e:",
+                                "        logging.error('Exception: %s' % e, exc_info=True)",
+                                "        status = cfnresponse.FAILED",
+                                "        cfnresponse.send(event, context, status, {}, None)"
+                            ]
+                        ]
+                    }
+                },
+                "Description": "Executes Snowflake config SSM document on Tableau server instance",
+                "MemorySize": 320,
+                "Timeout": 180,
+                "Role": {
+                    "Fn::GetAtt": [
+                        "SSMSendCommandLambdaRole",
+                        "Arn"
+                    ]
+                }
+            }
+        },
+        "ExecuteSnowflakeDocument": {
+            "Type": "Custom::ExecuteSnowflakeDocument",
+            "Version": "1.0",
+            "Properties": {
+                "ServiceToken": {
+                    "Fn::GetAtt": [
+                        "ExecuteSnowflakeDocumentLambda",
+                        "Arn"
+                    ]
+                },
+                "SSMDocument": {
+                    "Ref": "SnowflakeConfigDocument"
+                },
+                "InstanceId": {
+                    "Ref": "TableauInstanceId"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "SnowflakeHost": {
+            "Description": "SnowflakeHost",
+            "Value": {
+                "Ref": "SnowflakeHost"
+            }
+        },
+        "SnowflakeUsername": {
+            "Description": "SnowflakeUsername",
+            "Value": {
+                "Ref": "SnowflakeUsername"
+            }
+        },
+        "SnowflakeDatabaseName": {
+            "Description": "SnowflakeDatabaseName",
+            "Value": {
+                "Ref": "SnowflakeDatabaseName"
+            }
+        }
+    }
+}
