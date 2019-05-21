@@ -41,6 +41,10 @@
             "InstallationConfig": {
                 "InstallationBucket": "tableau-snowflake-quickstart",
                 "InstallationExecutable": "TableauServer-64bit.exe"
+            },
+            "QuickStartConfig": {
+                "QSS3BucketName": "cftests",
+                "QSS3KeyPrefix": "quickstart-tableau-snowflake/"
             }
         }
     },
@@ -61,6 +65,28 @@
                                     "DefaultConfiguration",
                                     "InstallationConfig",
                                     "InstallationBucket"
+                                ]
+                            }
+                        },
+                        "QSS3BucketName": {
+                            "type": "String",
+                            "description": "S3 bucket name for the Quick Start assets",
+                            "default": {
+                                "Fn::FindInMap": [
+                                    "DefaultConfiguration",
+                                    "QuickStartConfig",
+                                    "QSS3BucketName"
+                                ]
+                            }
+                        },
+                        "QSS3KeyPrefix": {
+                            "type": "String",
+                            "description": "S3 key prefix for the Quick Start assets",
+                            "default": {
+                                "Fn::FindInMap": [
+                                    "DefaultConfiguration",
+                                    "QuickStartConfig",
+                                    "QSS3KeyPrefix"
                                 ]
                             }
                         },
@@ -139,7 +165,8 @@
                                     "Start-BitsTransfer -Source \"http://sfc-snowsql-updates.s3.us-west-2.amazonaws.com/bootstrap/1.1/windows_x86_64/snowsql-1.1.76-windows_x86_64.msi\" -Destination \"C:\\tabsetup\\snowsql.msi\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/snowflake-odbc-driver.msi\" -Destination \"C:\\tabsetup\\snowflake-odbc-driver.msi\"",
                                     "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/snowsetup.txt\" -Destination \"C:\\tabsetup\\snowsetup.txt\"",
-                                    "Start-BitsTransfer -Source \"https://{{InstallationBucket}}.s3.amazonaws.com/quickstart.twb\" -Destination \"C:\\tabsetup\\quickstart.twb\""
+                                    "Start-BitsTransfer -Source \"https://{{QSS3BucketName}}.s3.amazonaws.com/{{QSS3KeyPrefix}}assets/workbooks/quickstart.twb\" -Destination \"C:\\tabsetup\\quickstart.twb\"",
+                                    "Start-BitsTransfer -Source \"https://{{QSS3BucketName}}.s3.amazonaws.com/{{QSS3KeyPrefix}}assets/workbooks/Account_Usage.twb\" -Destination \"C:\\tabsetup\\Account_Usage.twb\""
                                 ]
                             }
                         },
