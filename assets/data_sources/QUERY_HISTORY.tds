@@ -1,0 +1,689 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 20191.19.0213.2333                               -->
+<datasource formatted-name='federated.0xfuwu10lnsm8712deq2j0orbwzm (copy)' inline='true' source-platform='win' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <connection class='federated'>
+    <named-connections>
+      <named-connection caption='snowflakecomputing.example.com' name='snowflake.0ho9ypj170t5pd15syyfz0klve8o (copy)'>
+        <connection authentication='Username Password' class='snowflake' dbname='SNOWFLAKE' odbc-connect-string-extras='' one-time-sql='' schema='ACCOUNT_USAGE' server='snowflakecomputing.example.com' service='' username='USER_NAME' warehouse='BI_WH' />
+      </named-connection>
+    </named-connections>
+    <relation connection='snowflake.0ho9ypj170t5pd15syyfz0klve8o (copy)' name='QUERY_HISTORY' table='[ACCOUNT_USAGE].[QUERY_HISTORY]' type='table' />
+    <metadata-records>
+      <metadata-record class='column'>
+        <remote-name>QUERY_ID</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[QUERY_ID]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>QUERY_ID</remote-alias>
+        <ordinal>1</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>QUERY_TEXT</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[QUERY_TEXT]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>QUERY_TEXT</remote-alias>
+        <ordinal>2</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>DATABASE_ID</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[DATABASE_ID]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>DATABASE_ID</remote-alias>
+        <ordinal>3</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>39</precision>
+        <scale>0</scale>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DECIMAL&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>DATABASE_NAME</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[DATABASE_NAME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>DATABASE_NAME</remote-alias>
+        <ordinal>4</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>SCHEMA_ID</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[SCHEMA_ID]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>SCHEMA_ID</remote-alias>
+        <ordinal>5</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>39</precision>
+        <scale>0</scale>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DECIMAL&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>SCHEMA_NAME</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[SCHEMA_NAME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>SCHEMA_NAME</remote-alias>
+        <ordinal>6</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>QUERY_TYPE</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[QUERY_TYPE]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>QUERY_TYPE</remote-alias>
+        <ordinal>7</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>SESSION_ID</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[SESSION_ID]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>SESSION_ID</remote-alias>
+        <ordinal>8</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>38</precision>
+        <scale>0</scale>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DECIMAL&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>USER_NAME</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[USER_NAME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>USER_NAME</remote-alias>
+        <ordinal>9</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>ROLE_NAME</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[ROLE_NAME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>ROLE_NAME</remote-alias>
+        <ordinal>10</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>WAREHOUSE_ID</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[WAREHOUSE_ID]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>WAREHOUSE_ID</remote-alias>
+        <ordinal>11</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>39</precision>
+        <scale>0</scale>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DECIMAL&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>WAREHOUSE_NAME</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[WAREHOUSE_NAME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>WAREHOUSE_NAME</remote-alias>
+        <ordinal>12</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>WAREHOUSE_SIZE</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[WAREHOUSE_SIZE]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>WAREHOUSE_SIZE</remote-alias>
+        <ordinal>13</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>WAREHOUSE_TYPE</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[WAREHOUSE_TYPE]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>WAREHOUSE_TYPE</remote-alias>
+        <ordinal>14</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>CLUSTER_NUMBER</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[CLUSTER_NUMBER]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>CLUSTER_NUMBER</remote-alias>
+        <ordinal>15</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>39</precision>
+        <scale>0</scale>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DECIMAL&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>QUERY_TAG</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[QUERY_TAG]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>QUERY_TAG</remote-alias>
+        <ordinal>16</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>EXECUTION_STATUS</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[EXECUTION_STATUS]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>EXECUTION_STATUS</remote-alias>
+        <ordinal>17</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>ERROR_CODE</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[ERROR_CODE]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>ERROR_CODE</remote-alias>
+        <ordinal>18</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>ERROR_MESSAGE</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[ERROR_MESSAGE]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>ERROR_MESSAGE</remote-alias>
+        <ordinal>19</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>START_TIME</remote-name>
+        <remote-type>7</remote-type>
+        <local-name>[START_TIME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>START_TIME</remote-alias>
+        <ordinal>20</ordinal>
+        <local-type>datetime</local-type>
+        <aggregation>Year</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_TYPE_TIMESTAMP&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_TYPE_TIMESTAMP&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>END_TIME</remote-name>
+        <remote-type>7</remote-type>
+        <local-name>[END_TIME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>END_TIME</remote-alias>
+        <ordinal>21</ordinal>
+        <local-type>datetime</local-type>
+        <aggregation>Year</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_TYPE_TIMESTAMP&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_TYPE_TIMESTAMP&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>TOTAL_ELAPSED_TIME</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[TOTAL_ELAPSED_TIME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>TOTAL_ELAPSED_TIME</remote-alias>
+        <ordinal>22</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>39</precision>
+        <scale>0</scale>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DECIMAL&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>BYTES_SCANNED</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[BYTES_SCANNED]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>BYTES_SCANNED</remote-alias>
+        <ordinal>23</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>38</precision>
+        <scale>0</scale>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DECIMAL&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>ROWS_PRODUCED</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[ROWS_PRODUCED]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>ROWS_PRODUCED</remote-alias>
+        <ordinal>24</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>38</precision>
+        <scale>0</scale>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DECIMAL&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>COMPILATION_TIME</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[COMPILATION_TIME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>COMPILATION_TIME</remote-alias>
+        <ordinal>25</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>false</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>EXECUTION_TIME</remote-name>
+        <remote-type>5</remote-type>
+        <local-name>[EXECUTION_TIME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>EXECUTION_TIME</remote-alias>
+        <ordinal>26</ordinal>
+        <local-type>real</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>15</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DOUBLE&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_DOUBLE&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>QUEUED_PROVISIONING_TIME</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[QUEUED_PROVISIONING_TIME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>QUEUED_PROVISIONING_TIME</remote-alias>
+        <ordinal>27</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>false</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>QUEUED_REPAIR_TIME</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[QUEUED_REPAIR_TIME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>QUEUED_REPAIR_TIME</remote-alias>
+        <ordinal>28</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>false</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>QUEUED_OVERLOAD_TIME</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[QUEUED_OVERLOAD_TIME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>QUEUED_OVERLOAD_TIME</remote-alias>
+        <ordinal>29</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>false</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>TRANSACTION_BLOCKED_TIME</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[TRANSACTION_BLOCKED_TIME]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>TRANSACTION_BLOCKED_TIME</remote-alias>
+        <ordinal>30</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>false</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>OUTBOUND_DATA_TRANSFER_CLOUD</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[OUTBOUND_DATA_TRANSFER_CLOUD]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>OUTBOUND_DATA_TRANSFER_CLOUD</remote-alias>
+        <ordinal>31</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>OUTBOUND_DATA_TRANSFER_REGION</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[OUTBOUND_DATA_TRANSFER_REGION]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>OUTBOUND_DATA_TRANSFER_REGION</remote-alias>
+        <ordinal>32</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>OUTBOUND_DATA_TRANSFER_BYTES</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[OUTBOUND_DATA_TRANSFER_BYTES]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>OUTBOUND_DATA_TRANSFER_BYTES</remote-alias>
+        <ordinal>33</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>38</precision>
+        <scale>0</scale>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DECIMAL&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>INBOUND_DATA_TRANSFER_CLOUD</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[INBOUND_DATA_TRANSFER_CLOUD]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>INBOUND_DATA_TRANSFER_CLOUD</remote-alias>
+        <ordinal>34</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>INBOUND_DATA_TRANSFER_REGION</remote-name>
+        <remote-type>129</remote-type>
+        <local-name>[INBOUND_DATA_TRANSFER_REGION]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>INBOUND_DATA_TRANSFER_REGION</remote-alias>
+        <ordinal>35</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>16777216</width>
+        <contains-null>true</contains-null>
+        <collation flag='0' name='binary' />
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+          <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>INBOUND_DATA_TRANSFER_BYTES</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[INBOUND_DATA_TRANSFER_BYTES]</local-name>
+        <parent-name>[QUERY_HISTORY]</parent-name>
+        <remote-alias>INBOUND_DATA_TRANSFER_BYTES</remote-alias>
+        <ordinal>36</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>38</precision>
+        <scale>0</scale>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DECIMAL&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+    </metadata-records>
+  </connection>
+  <aliases enabled='yes' />
+  <column caption='Bytes Scanned' datatype='integer' name='[BYTES_SCANNED]' role='measure' type='quantitative' />
+  <column caption='Cluster Number' datatype='integer' name='[CLUSTER_NUMBER]' role='dimension' type='ordinal' />
+  <column caption='Compilation Time' datatype='string' name='[COMPILATION_TIME]' role='dimension' type='nominal' />
+  <column caption='Database Id' datatype='integer' name='[DATABASE_ID]' role='dimension' type='ordinal' />
+  <column caption='Database Name' datatype='string' name='[DATABASE_NAME]' role='dimension' type='nominal' />
+  <column caption='End Time' datatype='datetime' name='[END_TIME]' role='dimension' type='ordinal' />
+  <column caption='Error Code' datatype='string' name='[ERROR_CODE]' role='dimension' type='nominal' />
+  <column caption='Error Message' datatype='string' name='[ERROR_MESSAGE]' role='dimension' type='nominal' />
+  <column caption='Execution Status' datatype='string' name='[EXECUTION_STATUS]' role='dimension' type='nominal' />
+  <column caption='Execution Time' datatype='real' name='[EXECUTION_TIME]' role='measure' type='quantitative' />
+  <column caption='Inbound Data Transfer Bytes' datatype='integer' name='[INBOUND_DATA_TRANSFER_BYTES]' role='measure' type='quantitative' />
+  <column caption='Inbound Data Transfer Cloud' datatype='string' name='[INBOUND_DATA_TRANSFER_CLOUD]' role='dimension' type='nominal' />
+  <column caption='Inbound Data Transfer Region' datatype='string' name='[INBOUND_DATA_TRANSFER_REGION]' role='dimension' type='nominal' />
+  <column datatype='integer' name='[Number of Records]' role='measure' type='quantitative' user:auto-column='numrec'>
+    <calculation class='tableau' formula='1' />
+  </column>
+  <column caption='Outbound Data Transfer Bytes' datatype='integer' name='[OUTBOUND_DATA_TRANSFER_BYTES]' role='measure' type='quantitative' />
+  <column caption='Outbound Data Transfer Cloud' datatype='string' name='[OUTBOUND_DATA_TRANSFER_CLOUD]' role='dimension' type='nominal' />
+  <column caption='Outbound Data Transfer Region' datatype='string' name='[OUTBOUND_DATA_TRANSFER_REGION]' role='dimension' type='nominal' />
+  <column caption='Query Id' datatype='string' name='[QUERY_ID]' role='dimension' type='nominal' />
+  <column caption='Query Tag' datatype='string' name='[QUERY_TAG]' role='dimension' type='nominal' />
+  <column caption='Query Text' datatype='string' name='[QUERY_TEXT]' role='dimension' type='nominal' />
+  <column caption='Query Type' datatype='string' name='[QUERY_TYPE]' role='dimension' type='nominal' />
+  <column caption='Queued Overload Time' datatype='string' name='[QUEUED_OVERLOAD_TIME]' role='dimension' type='nominal' />
+  <column caption='Queued Provisioning Time' datatype='string' name='[QUEUED_PROVISIONING_TIME]' role='dimension' type='nominal' />
+  <column caption='Queued Repair Time' datatype='string' name='[QUEUED_REPAIR_TIME]' role='dimension' type='nominal' />
+  <column caption='Role Name' datatype='string' name='[ROLE_NAME]' role='dimension' type='nominal' />
+  <column caption='Rows Produced' datatype='integer' name='[ROWS_PRODUCED]' role='measure' type='quantitative' />
+  <column caption='Schema Id' datatype='integer' name='[SCHEMA_ID]' role='dimension' type='ordinal' />
+  <column caption='Schema Name' datatype='string' name='[SCHEMA_NAME]' role='dimension' type='nominal' />
+  <column caption='Session Id' datatype='integer' name='[SESSION_ID]' role='dimension' type='ordinal' />
+  <column caption='Start Time' datatype='datetime' name='[START_TIME]' role='dimension' type='ordinal' />
+  <column caption='Total Elapsed Time' datatype='integer' name='[TOTAL_ELAPSED_TIME]' role='measure' type='quantitative' />
+  <column caption='Transaction Blocked Time' datatype='string' name='[TRANSACTION_BLOCKED_TIME]' role='dimension' type='nominal' />
+  <column caption='User Name' datatype='string' name='[USER_NAME]' role='dimension' type='nominal' />
+  <column caption='Warehouse Id' datatype='integer' name='[WAREHOUSE_ID]' role='dimension' type='ordinal' />
+  <column caption='Warehouse Name' datatype='string' name='[WAREHOUSE_NAME]' role='dimension' type='nominal' />
+  <column caption='Warehouse Size' datatype='string' name='[WAREHOUSE_SIZE]' role='dimension' type='nominal' />
+  <column caption='Warehouse Type' datatype='string' name='[WAREHOUSE_TYPE]' role='dimension' type='nominal' />
+  <layout dim-ordering='alphabetic' dim-percentage='0.747487' measure-ordering='alphabetic' measure-percentage='0.252513' show-structure='true' />
+  <semantic-values>
+    <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+  </semantic-values>
+</datasource>
