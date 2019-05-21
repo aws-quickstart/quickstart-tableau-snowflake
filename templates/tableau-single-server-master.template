@@ -161,7 +161,7 @@
                     "default": "Tableau Server administrator username"
                 },
                 "TableauServerLicenseKey": {
-                    "default": "Tableau Activation key"
+                    "default": "Tableau activation key"
                 },
                 "Username": {
                     "default": "Tableau Services Manager (TSM) administrator username"
