@@ -332,16 +332,16 @@
             "Type": "String"
         },
         "SnowflakeHost": {
-            "Description": "URL host name of your Snowflake instance.",
+            "Description": "Host name of your Snowflake instance (e.g., xyz12345.us-east-1.snowflakecomputing.com).",
             "Type": "String",
             "AllowedPattern": "^(?!https:).*(\\.snowflakecomputing\\.com)$"
         },
         "SnowflakeUsername": {
-            "Description": "Username for your Snowflake account",
+            "Description": "User name for your Snowflake account.",
             "Type": "String"
         },
         "SnowflakePassword": {
-            "Description": "Password for your Snowflake account",
+            "Description": "Password for your Snowflake account.",
             "NoEcho": "true",
             "Type": "String"
         },
