@@ -6,7 +6,7 @@
             "ParameterGroups": [
                 {
                     "Label": {
-                        "default": "AWS Environment and Machine Configuration"
+                        "default": "AWS environment and machine configuration"
                     },
                     "Parameters": [
                         "KeyPairName",
@@ -19,7 +19,7 @@
                 },
                 {
                     "Label": {
-                        "default": "Secrets"
+                        "default": "Secrets configuration"
                     },
                     "Parameters": [
                         "Username",
@@ -30,7 +30,7 @@
                 },
                 {
                     "Label": {
-                        "default": "Registration"
+                        "default": "Registration configuration"
                     },
                     "Parameters": [
                         "AcceptEULA",
@@ -51,15 +51,7 @@
                 },
                 {
                     "Label": {
-                        "default": "AWS Quick Start Configuration"
-                    },
-                    "Parameters": [
-                        "QSS3BucketName"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "Snowflake Quick Start Configuration"
+                        "default": "Snowflake configuration"
                     },
                     "Parameters": [
                         "SnowflakeHost",
@@ -67,29 +59,41 @@
                         "SnowflakePassword",
                         "SnowflakeDatabaseName"
                     ]
+                },
+                {
+                    "Label": {
+                        "default": "AWS Quick Start configuration"
+                    },
+                    "Parameters": [
+                        "QSS3BucketName",
+                        "QSS3KeyPrefix"
+                    ]
                 }
             ],
             "ParameterLabels": {
-                "AcceptEULA": {
-                    "default": "Accept Tableau End User License Agreement"
-                },
                 "AMIOS": {
                     "default": "AMI Operating System"
+                },
+                "AcceptEULA": {
+                    "default": "Accept Tableau End User License Agreement"
                 },
                 "InstanceType": {
                     "default": "Tableau Amazon EC2 instance type"
                 },
                 "KeyPairName": {
-                    "default": "Key Pair Name"
+                    "default": "Key pair name"
                 },
                 "Password": {
                     "default": "Tableau Services Manager (TSM) administrator password"
                 },
                 "PublicSubnetID": {
-                    "default": "Public Subnet ID"
+                    "default": "Public subnet ID"
                 },
                 "QSS3BucketName": {
-                    "default": "Quick Start S3 Bucket Name"
+                    "default": "Quick Start S3 bucket name"
+                },
+                "QSS3KeyPrefix": {
+                    "default": "Quick Start S3 key prefix"
                 },
                 "RegCity": {
                     "default": "City"
@@ -104,16 +108,16 @@
                     "default": "Department"
                 },
                 "RegEmail": {
-                    "default": "Email Address"
+                    "default": "Email address"
                 },
                 "RegFirstName": {
-                    "default": "First Name"
+                    "default": "First name"
                 },
                 "RegIndustry": {
                     "default": "Industry"
                 },
                 "RegLastName": {
-                    "default": "Last Name"
+                    "default": "Last name"
                 },
                 "RegPhone": {
                     "default": "Phone"
@@ -125,7 +129,19 @@
                     "default": "Title"
                 },
                 "RegZip": {
-                    "default": "Zip/Postal Code"
+                    "default": "Zip/Postal code"
+                },
+                "SnowflakeDatabaseName": {
+                    "default": "Snowflake database name"
+                },
+                "SnowflakeHost": {
+                    "default": "Snowflake host"
+                },
+                "SnowflakePassword": {
+                    "default": "Snowflake password"
+                },
+                "SnowflakeUsername": {
+                    "default": "Snowflake user name"
                 },
                 "SourceCIDR": {
                     "default": "Source CIDR for Access"
@@ -137,25 +153,13 @@
                     "default": "Tableau Server administrator username"
                 },
                 "TableauServerLicenseKey": {
-                    "default": "Tableau Activation Key"
+                    "default": "Tableau Activation key"
                 },
                 "Username": {
                     "default": "Tableau Services Manager (TSM) administrator username"
                 },
                 "VPCID": {
-                    "default": "VPC where you will deploy the server"
-                },
-                "SnowflakeHost": {
-                    "default": "URL of your Snowflake instance."
-                },
-                "SnowflakeUsername": {
-                    "default": "Username for your Snowflake account"
-                },
-                "SnowflakePassword": {
-                    "default": "Password for your Snowflake account"
-                },
-                "SnowflakeDatabaseName": {
-                    "default": "Name of the Snowflake database you're connecting to."
+                    "default": "VPC ID"
                 }
             }
         }
@@ -212,14 +216,14 @@
         "QSS3BucketName": {
             "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
             "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
-            "Default": "tableau-snowflake-quickstart",
+            "Default": "aws-quickstart",
             "Description": "S3 bucket name for the Quick Start assets. This string can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
             "Type": "String"
         },
         "QSS3KeyPrefix": {
             "AllowedPattern": "^[0-9a-zA-Z-/]*$",
             "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
-            "Default": "tableau-snowflake-quickstart/",
+            "Default": "quickstart-tableau-snowflake/",
             "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
             "Type": "String"
         },
@@ -344,6 +348,57 @@
         }
     },
     "Resources": {
+        "TableauIAMRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "Path": "/",
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": "ec2.amazonaws.com"
+                        },
+                        "Action": "sts:AssumeRole"
+                    }
+                },
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+                ],
+                "Policies": [
+                    {
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Action": [
+                                        "s3:GetObject"
+                                    ],
+                                    "Resource": [
+                                        {
+                                            "Fn::Sub": "arn:aws:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*"
+                                        }
+                                    ],
+                                    "Effect": "Allow"
+                                }
+                            ]
+                        },
+                        "PolicyName": "aws-quick-start-s3-policy"
+                    }
+                ]
+            }
+        },
+        "TableauServerInstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": "/",
+                "Roles": [
+                    {
+                        "Ref": "TableauIAMRole"
+                    }
+                ]
+            }
+        },
         "WorkloadStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
@@ -419,6 +474,12 @@
                     },
                     "TableauServerLicenseKey": {
                         "Ref": "TableauServerLicenseKey"
+                    },
+                    "TableauIAMRole": {
+                        "Ref": "TableauIAMRole"
+                    },
+                    "TableauServerInstanceProfile": {
+                        "Ref": "TableauServerInstanceProfile"
                     },
                     "Username": {
                         "Ref": "Username"

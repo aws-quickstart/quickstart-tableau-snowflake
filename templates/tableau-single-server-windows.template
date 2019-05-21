@@ -265,6 +265,14 @@
             "MinLength": "1",
             "Type": "String"
         },
+        "TableauIAMRole": {
+            "Description": "Tableau server IAM role",
+            "Type": "String"
+        },
+        "TableauServerInstanceProfile": {
+            "Description": "Tableau server IAM Instance Profile",
+            "Type": "String"
+        },
         "TableauServerLicenseKey": {
             "Description": "License Key (leave blank for trial)",
             "Type": "String"
@@ -372,6 +380,19 @@
         "TableauWindowsServer": {
             "Type": "AWS::EC2::Instance",
             "Metadata": {
+                "AWS::CloudFormation::Authentication": {
+                    "S3AccessCreds": {
+                        "type": "S3",
+                        "roleName": {
+                            "Ref": "TableauIAMRole"
+                        },
+                        "buckets": [
+                            {
+                                "Ref": "QSS3BucketName"
+                            }
+                        ]
+                    }
+                },
                 "AWS::CloudFormation::Init": {
                     "config": {
                         "files": {
@@ -639,12 +660,14 @@
                             "c:\\tabsetup\\quickstart.twb": {
                                 "source": {
                                     "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}assets/workbooks/quickstart.twb"
-                                }
+                                },
+                                "authentication": "S3AccessCreds"
                             },
                             "c:\\tabsetup\\Account_Usage.twb": {
                                 "source": {
-                                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}assets/workbooks/Account_Usage.twb"
-                                }
+                                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}assets/workbooks/Account_Usage.twb",
+                                },
+                                "authentication": "S3AccessCreds"
                             },
                             "c:\\tabsetup\\config-temp": {
                                 "content": {
@@ -1150,6 +1173,9 @@
                 },
                 "InstanceType": {
                     "Ref": "InstanceType"
+                },
+                "IamInstanceProfile": {
+                    "Ref": "TableauServerInstanceProfile"
                 },
                 "ImageId": {
                     "Fn::FindInMap": [
