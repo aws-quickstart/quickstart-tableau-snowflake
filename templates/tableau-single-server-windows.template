@@ -665,7 +665,7 @@
                             },
                             "c:\\tabsetup\\Account_Usage.twb": {
                                 "source": {
-                                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}assets/workbooks/Account_Usage.twb",
+                                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}assets/workbooks/Account_Usage.twb"
                                 },
                                 "authentication": "S3AccessCreds"
                             },
