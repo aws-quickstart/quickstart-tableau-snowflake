@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "AWS CloudFormation Template: Single-node Tableau Server running on Windows.",
+    "Description": "AWS CloudFormation Template: Single-node Tableau Server running on Windows. (qs-1pkrl7c59)",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
