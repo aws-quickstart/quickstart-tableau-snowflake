@@ -19,8 +19,23 @@ global:
     - us-west-2
   reporting: true
 tests:
-  tab-snowflake:
-    parameter_input: test-params.json
+  tab-snowflake1:
+    parameter_input: test-params1.json
     regions:
       - us-east-2
+    template_file: tableau-single-server-master.template
+  tab-snowflake2:
+    parameter_input: test-params2.json
+    regions:
+      - ca-central-1
+    template_file: tableau-single-server-master.template
+  tab-snowflake3:
+    parameter_input: test-params3.json
+    regions:
+      - eu-west-1
+    template_file: tableau-single-server-master.template
+  tab-snowflake4:
+    parameter_input: test-params4.json
+    regions:
+      - ap-south-1
     template_file: tableau-single-server-master.template

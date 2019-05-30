@@ -113,7 +113,7 @@
     },
     {
         "ParameterKey": "SnowflakeUsername",
-        "ParameterValue": "YOUR_SNOWFLAKE_USERNAME"
+        "ParameterValue": "AWSQUICKSTART2"
     },
     {
         "ParameterKey": "SnowflakePassword",

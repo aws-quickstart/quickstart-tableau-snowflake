@@ -1,0 +1,126 @@
+[
+    {
+        "ParameterKey": "RegIndustry",
+        "ParameterValue": "Test Industry"
+    },
+    {
+        "ParameterKey": "TableauServerAdminPassword",
+        "ParameterValue": "overridden"
+    },
+    {
+        "ParameterKey": "RegLastName",
+        "ParameterValue": "Test Last Name"
+    },
+    {
+        "ParameterKey": "RegPhone",
+        "ParameterValue": "Test Phone"
+    },
+    {
+        "ParameterKey": "RegFirstName",
+        "ParameterValue": "Test First Name"
+    },
+    {
+        "ParameterKey": "RegTitle",
+        "ParameterValue": "Test Title"
+    },
+    {
+        "ParameterKey": "RegDepartment",
+        "ParameterValue": "Test Department"
+    },
+    {
+        "ParameterKey": "VPCCIDR",
+        "ParameterValue": "10.0.0.0/16"
+    },
+    {
+        "ParameterKey": "RegCompany",
+        "ParameterValue": "Test Company"
+    },
+    {
+        "ParameterKey": "PublicSubnet1CIDR",
+        "ParameterValue": "10.0.128.0/20"
+    },
+    {
+        "ParameterKey": "InstanceType",
+        "ParameterValue": "m4.2xlarge"
+    },
+    {
+        "ParameterKey": "RegCity",
+        "ParameterValue": "Test City"
+    },
+    {
+        "ParameterKey": "Password",
+        "ParameterValue": "overridden"
+    },
+    {
+        "ParameterKey": "TableauServerLicenseKey",
+        "ParameterValue": ""
+    },
+    {
+        "ParameterKey": "KeyPairName",
+        "ParameterValue": "$[taskcat_getkeypair]"
+    },
+    {
+        "ParameterKey": "QSS3BucketName",
+        "ParameterValue": "$[taskcat_autobucket]"
+    },
+    {
+        "ParameterKey": "RegZip",
+        "ParameterValue": "Test Zip"
+    },
+    {
+        "ParameterKey": "AcceptEULA",
+        "ParameterValue": "Yes"
+    },
+    {
+        "ParameterKey": "SourceCIDR",
+        "ParameterValue": "10.0.0.0/16"
+    },
+    {
+        "ParameterKey": "AvailabilityZones",
+        "ParameterValue": "$[taskcat_genaz_2]"
+    },
+    {
+        "ParameterKey": "RegCountry",
+        "ParameterValue": "Test Country"
+    },
+    {
+        "ParameterKey": "RegEmail",
+        "ParameterValue": "testemail@example.com"
+    },
+    {
+        "ParameterKey": "PublicSubnet2CIDR",
+        "ParameterValue": "10.0.144.0/20"
+    },
+    {
+        "ParameterKey": "Username",
+        "ParameterValue": "qsadmin"
+    },
+    {
+        "ParameterKey": "AMIOS",
+        "ParameterValue": "Windows"
+    },
+    {
+        "ParameterKey": "TableauServerAdminUser",
+        "ParameterValue": "admin"
+    },
+    {
+        "ParameterKey": "RegState",
+        "ParameterValue": "Test State"
+    },
+    {
+        "ParameterKey": "SnowflakeHost",
+        "ParameterValue": "YOUR_SNOWFLAKE_HOST"
+    },
+    {
+        "ParameterKey": "SnowflakeUsername",
+        "ParameterValue": "AWSQUICKSTART4"
+    },
+    {
+        "ParameterKey": "SnowflakePassword",
+        "ParameterValue": "YOUR_SNOWFLAKE_PASSWORD"
+    },
+    {
+        "ParameterKey": "SnowflakeDatabaseName",
+        "ParameterValue": "NYC_TAXI_DATA"
+    }
+]
