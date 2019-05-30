@@ -641,21 +641,9 @@
                             },
                             "c:\\tabsetup\\snowsetup.txt": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "https://",
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "DefaultConfiguration",
-                                                    "InstallationConfig",
-                                                    "InstallationBucket"
-                                                ]
-                                            },
-                                            ".s3.amazonaws.com/snowsetup.txt"
-                                        ]
-                                    ]
-                                }
+                                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}assets/scripts/snowsetup.txt"
+                                },
+                                "authentication": "S3AccessCreds"
                             },
                             "c:\\tabsetup\\quickstart.twb": {
                                 "source": {
