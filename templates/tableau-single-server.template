@@ -48,6 +48,7 @@ Metadata:
           default: AWS Quick Start configuration
         Parameters:
           - QSS3BucketName
+          - QSS3BucketRegion
           - QSS3KeyPrefix
     ParameterLabels:
       AMIOS:
@@ -64,6 +65,8 @@ Metadata:
         default: Public subnet ID
       QSS3BucketName:
         default: Quick Start S3 bucket name
+      QSS3BucketRegion:
+        default: Quick Start S3 bucket region
       QSS3KeyPrefix:
         default: Quick Start S3 key prefix
       RegCity:
@@ -160,6 +163,10 @@ Parameters:
     Description: S3 bucket name for the Quick Start assets. This string can include
       numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start
       or end with a hyphen (-).
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
     Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
@@ -278,8 +285,9 @@ Resources:
             Statement:
               - Action:
                   - s3:GetObject
-                Resource:
-                  - !Sub 'arn:aws:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*'
+                Resource: !Sub
+                  - arn:${AWS::Partition}:s3:::${S3Bucket}/${QSS3KeyPrefix}*
+                  - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
                 Effect: Allow
           PolicyName: aws-quick-start-s3-policy
   TableauServerInstanceProfile:
@@ -291,7 +299,11 @@ Resources:
   WorkloadStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub 'https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/tableau-single-server-windows.template'
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/tableau-single-server-windows.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         PublicSubnetId: !Ref 'PublicSubnetID'
         AcceptEULA: !Ref 'AcceptEULA'
@@ -299,6 +311,7 @@ Resources:
         KeyPairName: !Ref 'KeyPairName'
         Password: !Ref 'Password'
         QSS3BucketName: !Ref 'QSS3BucketName'
+        QSS3BucketRegion: !Ref 'QSS3BucketRegion'
         QSS3KeyPrefix: !Ref 'QSS3KeyPrefix'
         RegCity: !Ref 'RegCity'
         RegCompany: !Ref 'RegCompany'

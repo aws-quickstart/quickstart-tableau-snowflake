@@ -138,6 +138,10 @@ Parameters:
       numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start
       or end with a hyphen (-).
     Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
@@ -278,6 +282,7 @@ Conditions:
   IsTrial: !Equals
     - ''
     - !Ref 'TableauServerLicenseKey'
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Resources:
   TableauWindowsServer:
     Type: AWS::EC2::Instance
@@ -286,8 +291,7 @@ Resources:
         S3AccessCreds:
           type: S3
           roleName: !Ref 'TableauIAMRole'
-          buckets:
-            - !Ref 'QSS3BucketName'
+          buckets: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       AWS::CloudFormation::Init:
         config:
           files:
@@ -407,13 +411,25 @@ Resources:
                     - InstallationBucket
                   - .s3.amazonaws.com/snowflake-odbc-driver.msi
             c:\tabsetup\snowsetup.txt:
-              source: !Sub 'https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}assets/scripts/snowsetup.txt'
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}assets/scripts/snowsetup.txt'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               authentication: S3AccessCreds
             c:\tabsetup\quickstart.twb:
-              source: !Sub 'https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}assets/workbooks/quickstart.twb'
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}assets/workbooks/quickstart.twb'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               authentication: S3AccessCreds
             c:\tabsetup\Account_Usage.twb:
-              source: !Sub 'https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}assets/workbooks/Account_Usage.twb'
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}assets/workbooks/Account_Usage.twb'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               authentication: S3AccessCreds
             c:\tabsetup\config-temp:
               content: !Join
